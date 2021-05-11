@@ -15,4 +15,5 @@ use App\Http\Controllers\AppController;
 |
 */
 
-Route::get('/', [AppController::class, 'index']);
+Route::get('/', [AppController::class, 'index'])->name('apps.index');
+Route::resource('/apps', AppController::class)->except(['index']);

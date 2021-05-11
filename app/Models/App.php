@@ -11,10 +11,17 @@ class App extends Model
     use HasFactory;
 
     protected $with = [
-        "docker_images"
+        "docker_images",
     ];
 
-    public function dockerImages(): HasMany
+    protected $fillable = [
+        "title",
+        "url",
+        "fs_path",
+        "serve_exec",
+    ];
+
+    public function docker_images(): HasMany
     {
         return $this->hasMany(DockerImage::class);
     }

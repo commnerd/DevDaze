@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use \Illuminate\Http\Response;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Models\App;
 
@@ -13,10 +14,10 @@ class AppController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): Response
     {
         $apps = App::all();
-        return view('index', compact('apps'));
+        return response()->view('index', compact('apps'));
     }
 
     /**
@@ -24,20 +25,29 @@ class AppController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): Response
     {
-        //
+        return response()->view('apps.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $this->validate($request, [
+            'title' => 'required',
+            'url' => 'required',
+            'fs_path' => 'required',
+            'serve_exec' => 'required',
+        ]);
+
+        App::create($request->all());
+
+        return redirect()->route('apps.index');
     }
 
     /**
@@ -46,7 +56,7 @@ class AppController extends Controller
      * @param  \App\Models\App  $app
      * @return \Illuminate\Http\Response
      */
-    public function show(App $app)
+    public function show(App $app): Response
     {
         //
     }
@@ -57,9 +67,9 @@ class AppController extends Controller
      * @param  \App\Models\App  $app
      * @return \Illuminate\Http\Response
      */
-    public function edit(App $app)
+    public function edit(App $app): Response
     {
-        //
+        return response()->view('apps.form', compact('app'));
     }
 
     /**
@@ -67,11 +77,11 @@ class AppController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\App  $app
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, App $app)
+    public function update(Request $request, App $app): RedirectResponse
     {
-        //
+        return redirect()->route('apps.index');
     }
 
     /**
@@ -80,7 +90,7 @@ class AppController extends Controller
      * @param  \App\Models\App  $app
      * @return \Illuminate\Http\Response
      */
-    public function destroy(App $app)
+    public function destroy(App $app): Response
     {
         //
     }
