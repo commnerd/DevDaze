@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\App;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\App;
 
 class AppFactory extends Factory
 {
@@ -22,7 +22,21 @@ class AppFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'title' => $this->faker->words(rand(1, 3), true),
+            'fs_path' => $this->getRandomDir(getenv("HOME"), rand(1, 3)),
+            'url' => $this->faker->word(),
         ];
+    }
+
+    
+
+    private function getRandomDir(string $basePath, int $depth = 1) {
+        $dirs = glob($basePath . DIRECTORY_SEPARATOR . '*' , GLOB_ONLYDIR);
+
+        if(sizeof($dirs) <= 0 && $depth === 0) {
+            return $basePath;
+        }
+
+        return DIRECTORY_SEPARATOR . $dirs[rand(0, sizeof($dirs) - 1)];
     }
 }

@@ -67,7 +67,7 @@ class AppController extends Controller
     {
         $this->validate($request, (new App)->validations());
 
-        App::update($request->all());
+        $app->update($request->all());
 
         return redirect()->route('apps.index');
     }
@@ -76,10 +76,12 @@ class AppController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\App  $app
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(App $app): Response
+    public function destroy(App $app): RedirectResponse
     {
-        //
+        $app->delete();
+
+        return redirect()->route('apps.index');
     }
 }

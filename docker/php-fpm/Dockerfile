@@ -1,3 +1,0 @@
-ENV PHP_VERSION 8.0
-
-FROM php:${PHP_VERSION}-fpm
