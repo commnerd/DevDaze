@@ -9,7 +9,7 @@
     @foreach($apps ?? '' as $app)
         <div class="row">
             <div class="col-6">
-                <a href="#">{{ $app->title }}</a>
+                <a href="{{ route('apps.edit', $app->id) }}">{{ $app->title }}</a>
             </div>
             <div class="col-6">
                 <a href="{{ $app->url }}">{{ $app->url }}</a>

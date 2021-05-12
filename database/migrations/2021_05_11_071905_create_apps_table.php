@@ -18,7 +18,7 @@ class CreateAppsTable extends Migration
             $table->string('title');
             $table->string('fs_path');
             $table->string('url');
-            $table->string('serve_exec');
+            $table->string('slug');
             $table->timestamps();
         });
     }

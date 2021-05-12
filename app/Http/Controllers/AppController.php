@@ -27,7 +27,7 @@ class AppController extends Controller
      */
     public function create(): Response
     {
-        return response()->view('apps.create');
+        return response()->view('apps.create', ['app' => null]);
     }
 
     /**
@@ -38,27 +38,11 @@ class AppController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $this->validate($request, [
-            'title' => 'required',
-            'url' => 'required',
-            'fs_path' => 'required',
-            'serve_exec' => 'required',
-        ]);
+        $this->validate($request, (new App)->validations());
 
         App::create($request->all());
 
         return redirect()->route('apps.index');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\App  $app
-     * @return \Illuminate\Http\Response
-     */
-    public function show(App $app): Response
-    {
-        //
     }
 
     /**
@@ -69,7 +53,7 @@ class AppController extends Controller
      */
     public function edit(App $app): Response
     {
-        return response()->view('apps.form', compact('app'));
+        return response()->view('apps.edit', compact('app'));
     }
 
     /**
@@ -81,6 +65,10 @@ class AppController extends Controller
      */
     public function update(Request $request, App $app): RedirectResponse
     {
+        $this->validate($request, (new App)->validations());
+
+        App::update($request->all());
+
         return redirect()->route('apps.index');
     }
 

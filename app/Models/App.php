@@ -4,11 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class App extends Model
 {
-    use HasFactory;
+    use HasFactory, Sluggable;
+
+    public function validations() {
+        return [
+            'title' => 'required',
+            'url' => 'required',
+            'fs_path' => 'required',
+        ];
+    }
 
     protected $with = [
         "docker_images",
@@ -18,11 +26,24 @@ class App extends Model
         "title",
         "url",
         "fs_path",
-        "serve_exec",
     ];
 
     public function docker_images(): HasMany
     {
         return $this->hasMany(DockerImage::class);
+    }
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
     }
 }

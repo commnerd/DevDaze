@@ -2,84 +2,79 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DockerImage;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use App\Models\DockerImage;
+use App\Models\App;
 
 class DockerImageController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
+     * @param  \App\Models\App  $app
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(App $app): Response
     {
-        //
+        return response()->view('apps.docker_images.create', compact('app'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\App  $app
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, App $app): RedirectResponse
     {
-        //
-    }
+        $this->validate($request, (new DockerImage)->validations());
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\DockerImage  $dockerImage
-     * @return \Illuminate\Http\Response
-     */
-    public function show(DockerImage $dockerImage)
-    {
-        //
+        $app->docker_images()->create($request->all());
+
+        return redirect()->route('apps.edit', compact('app'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
+     * @param  \App\Models\App  $app
      * @param  \App\Models\DockerImage  $dockerImage
      * @return \Illuminate\Http\Response
      */
-    public function edit(DockerImage $dockerImage)
+    public function edit(App $app, DockerImage $docker_image): Response
     {
-        //
+        return response()->view('apps.docker_images.edit', compact('app', 'docker_image'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\App  $app
      * @param  \App\Models\DockerImage  $dockerImage
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, DockerImage $dockerImage)
+    public function update(Request $request, App $app, DockerImage $docker_image): RedirectResponse
     {
-        //
+        $this->validate($request, $docker_image->validations());
+
+        $docker_image->update($request->all());
+
+        return redirect()->route('apps.edit', compact('app', 'docker_image'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \App\Models\App  $app
      * @param  \App\Models\DockerImage  $dockerImage
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DockerImage $dockerImage)
+    public function destroy(App $app, DockerImage $dockerImage)
     {
-        //
+        
     }
 }

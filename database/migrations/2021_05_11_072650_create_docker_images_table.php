@@ -21,7 +21,7 @@ class CreateDockerImagesTable extends Migration
                 ->onDelete('cascade');
             $table->string('label');
             $table->string('tag');
-
+            $table->string('slug');
             $table->timestamps();
         });
     }
