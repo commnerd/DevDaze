@@ -67,6 +67,7 @@ class AppController extends Controller
     {
         $this->validate($request, (new App)->validations());
 
+        // Purge the slug for regeneration per https://github.com/cviebrock/eloquent-sluggable#onupdate
         $app->slug = null;
         $app->update($request->all());
 

@@ -8,6 +8,8 @@ use Tests\TestCase;
 
 class AppTest extends TestCase
 {
+    private $requiredFields = ["title", "fs_path", "url"];
+    
     /**
      * An empty app index page test.
      *
@@ -78,6 +80,7 @@ class AppTest extends TestCase
         ]);
 
         $response->assertStatus(302);
+        $response->assertRedirect(route('apps.index'));
         
         $app = App::findOrFail(1);
 
@@ -143,6 +146,7 @@ class AppTest extends TestCase
         ]);
 
         $response->assertStatus(302);
+        $response->assertRedirect(route('apps.index'));
         
         $app = App::findOrFail(1);
 
@@ -166,7 +170,45 @@ class AppTest extends TestCase
         $response = $this->delete(route('apps.destroy', 1));
 
         $response->assertStatus(302);
+        $response->assertRedirect(route('apps.index'));
         
         $this->assertEquals(0, App::count());
+    }
+
+    /**
+     * An app required validation test
+     *
+     * @return void
+     */
+    public function testAppRequiredValidations()
+    {
+        foreach($this->requiredFields as $requiredField) {
+            $app = App::factory()->make();
+
+            // Fail creation
+            $value = $app->{$requiredField};
+            $app->{$requiredField} = "";
+            $response = $this->post(route('apps.store'), $app->toArray());
+
+            // Assert creation failure
+            $response->assertStatus(302);
+            $response->assertSessionHasErrors([
+                $requiredField => "The ".str_replace("_", " ", $requiredField)." field is required.",
+            ]);
+
+            $app->{$requiredField} = $value;
+            $app = App::create($app->toArray());
+
+            // Fail update
+            $value = $app->{$requiredField};
+            $app->{$requiredField} = "";
+            $response = $this->put(route('apps.update', $app->id), $app->toArray());
+
+            // Assert update failure
+            $response->assertStatus(302);
+            $response->assertSessionHasErrors([
+                $requiredField => "The ".str_replace("_", " ", $requiredField)." field is required.",
+            ]);
+        }
     }
 }

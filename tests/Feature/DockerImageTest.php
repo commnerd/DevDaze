@@ -9,6 +9,8 @@ use Tests\TestCase;
 
 class DockerImageTest extends TestCase
 {
+    private $requiredFields = ["app_id", "label", "tag"];
+
     /**
      * A single docker image index page test
      *
@@ -139,5 +141,49 @@ class DockerImageTest extends TestCase
         $response->assertStatus(302);
         
         $this->assertEquals(0, DockerImage::count());
+    }
+
+    /**
+     * A docker image required validation test
+     *
+     * @return void
+     */
+    public function testDockerImageRequiredValidations()
+    {
+        foreach($this->requiredFields as $requiredField) {
+            $dockerImage = DockerImage::factory()->make();
+
+            $appId = $dockerImage->app->id;
+
+            // Fail creation
+            $value = $dockerImage->{$requiredField};
+            $dockerImage->{$requiredField} = "";
+            $response = $this->post(route('apps.docker_images.store', $appId), $dockerImage->toArray());
+
+            // Assert creation failure
+            $response->assertStatus(302);
+            $response->assertSessionHasErrors([
+                $requiredField => "The ".str_replace("_", " ", $requiredField)." field is required.",
+            ]);
+
+            if(is_null(DockerImage::first())) {
+                $dockerImage = DockerImage::factory()->create([
+                    'app_id' => $appId,
+                ]);
+            }
+            $dockerImage = DockerImage::first();
+            $dockerImage->{$requiredField} = $value;
+
+            // Fail update
+            $value = $dockerImage->{$requiredField};
+            $dockerImage->{$requiredField} = "";
+            $response = $this->put(route('apps.docker_images.update', [$appId, $dockerImage->id]), $dockerImage->toArray());
+
+            // Assert update failure
+            $response->assertStatus(302);
+            $response->assertSessionHasErrors([
+                $requiredField => "The ".str_replace("_", " ", $requiredField)." field is required.",
+            ]);
+        }
     }
 }
