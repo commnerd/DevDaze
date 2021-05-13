@@ -67,6 +67,7 @@ class AppController extends Controller
     {
         $this->validate($request, (new App)->validations());
 
+        $app->slug = null;
         $app->update($request->all());
 
         return redirect()->route('apps.index');

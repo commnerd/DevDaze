@@ -109,12 +109,12 @@ class AppTest extends TestCase
         $response->assertSee('File System Path');
         $response->assertSee('Submit');
         $response->assertSee('name="title"', false);
-        $response->assertSee('name="url"', false);
-        $response->assertSee('name="fs_path"', false);
-        $response->assertSee('type="submit"', false);
-
         $response->assertSee('value="Woot!"', false);
+        $response->assertSee('name="url"', false);
+        $response->assertSee('value="/tmp"', false);
+        $response->assertSee('name="fs_path"', false);
         $response->assertSee('value="woot"', false);
+        $response->assertSee('type="submit"', false);
     }
 
     /**
@@ -149,7 +149,7 @@ class AppTest extends TestCase
         $this->assertEquals("Foo!", $app->title);
         $this->assertEquals("/tmp/changed", $app->fs_path);
         $this->assertEquals("bar", $app->url);
-        $this->assertEquals("woot", $app->slug);
+        $this->assertEquals("foo", $app->slug);
     }
 
     /**

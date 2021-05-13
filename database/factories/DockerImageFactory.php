@@ -2,8 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\DockerImage;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\DockerImage;
+use App\Models\App;
 
 class DockerImageFactory extends Factory
 {
@@ -21,8 +22,11 @@ class DockerImageFactory extends Factory
      */
     public function definition()
     {
+        $label = $this->faker->words(rand(1, 3), true);
         return [
-            //
+            "app_id" => App::factory()->create(["title" => "App for \"$label\" docker image"])->id,
+            "label" => $label,
+            "tag" => $this->faker->word().":latest",
         ];
     }
 }

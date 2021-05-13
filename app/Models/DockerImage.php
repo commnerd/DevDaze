@@ -26,7 +26,7 @@ class DockerImage extends Model
 
     public function app(): BelongsTo
     {
-        return $this->hasMany(App::class);
+        return $this->belongsTo(App::class);
     }
 
     /**

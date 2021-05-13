@@ -61,9 +61,11 @@ class DockerImageController extends Controller
     {
         $this->validate($request, $docker_image->validations());
 
+        // Purge the slug for regeneration per https://github.com/cviebrock/eloquent-sluggable#onupdate
+        $docker_image->slug = null;
         $docker_image->update($request->all());
 
-        return redirect()->route('apps.edit', compact('app', 'docker_image'));
+        return redirect()->route('apps.edit', compact('app'));
     }
 
     /**
@@ -75,6 +77,8 @@ class DockerImageController extends Controller
      */
     public function destroy(App $app, DockerImage $dockerImage)
     {
-        
+        $dockerImage->delete();
+
+        return redirect()->route('apps.edit', $app->id);
     }
 }
