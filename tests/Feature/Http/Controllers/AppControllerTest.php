@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Http\Controllers;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\App;
 use Tests\TestCase;
 
-class AppTest extends TestCase
+class AppControllerTest extends TestCase
 {
     private $requiredFields = ["title", "fs_path", "url"];
     

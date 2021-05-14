@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use App\Traits\BumpsService;
 use App\Models\DockerImage;
 use App\Models\App;
 
 class DockerImageController extends Controller
 {
+    use BumpsService;
+    
     /**
      * Show the form for creating a new resource.
      *

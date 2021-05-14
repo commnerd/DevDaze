@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Http\Controllers;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\DockerImage;
 use App\Models\App;
 use Tests\TestCase;
 
-class DockerImageTest extends TestCase
+class DockerImageControllerTest extends TestCase
 {
     private $requiredFields = ["app_id", "label", "tag"];
 

@@ -2,12 +2,16 @@
 
 namespace App\Traits;
 
-use App\Events\ContainerSaved;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use App\Interfaces\DockerImageDescendant;
+use App\Jobs\BumpService;
 
 trait BumpsService {
-    public function save() {
-        parent::save();
+    use DispatchesJobs;
 
-        ContainerSaved::dispatch($container);
+    public function save(array $options = []) {
+        parent::save($options);
+
+        $this->dispatch(new BumpService($this->getDockerImage()));
     }
 }
