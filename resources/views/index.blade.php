@@ -7,6 +7,9 @@
         </div>
     </header>
     <div class="col-12">
+        <div id="terminal"></div>
+    </div>
+    <div class="col-12">
         <h2 class="d-flex justify-content-center">Projects</h2>
     </div
     @if(sizeof($apps) > 0)

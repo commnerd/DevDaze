@@ -11,7 +11,16 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
-        //
-    ]);
+mix.webpackConfig({
+    resolve: {
+        fallback: {
+            "path": require.resolve("path-browserify"),
+            "stream": require.resolve("stream-browserify"),
+            "zlib": require.resolve("browserify-zlib"),
+            "http": require.resolve("stream-http"),
+            "crypto": require.resolve("crypto-browserify"),
+            "fs": false
+        }
+    }
+})
+.js('resources/js/app.js', 'public/js');
