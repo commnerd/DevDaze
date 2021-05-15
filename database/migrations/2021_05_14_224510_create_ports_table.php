@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVolumesTable extends Migration
+class CreatePortsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateVolumesTable extends Migration
      */
     public function up()
     {
-        Schema::create('volumes', function (Blueprint $table) {
+        Schema::create('ports', function (Blueprint $table) {
             $table->id();
             $table->foreignId('docker_image_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->string("host_path");
-            $table->string("container_path");
+            $table->integer("host_port");
+            $table->integer("container_port");
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ class CreateVolumesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('volumes');
+        Schema::dropIfExists('ports');
     }
 }

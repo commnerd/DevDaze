@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Bus\Queueable;
 use App\Models\DockerImage;
-
+use App\Services\Docker;
 
 class BumpService implements ShouldQueue
 {
@@ -33,6 +33,6 @@ class BumpService implements ShouldQueue
      */
     public function handle()
     {
-        //
+        Docker::restart($this->dockerImage);
     }
 }

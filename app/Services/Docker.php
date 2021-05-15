@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use Symfony\Component\Process\Process;
+use App\Models\DockerImage;
+
 class Docker
 {
     public const TYPE_ERR = "error";
@@ -19,11 +22,11 @@ class Docker
      */
     public static function running(DockerImage $dockerImage): bool
     {
-        $cmd = ["docker", "ps", "--filter", "name=".$dockerImage->name];
+        $cmd = ["docker", "ps", "--filter", "name=".$dockerImage->name()];
 
         $output = self::execute($cmd, $dockerImage->app->fs_path);
 
-        return $output[self::STATUS_LABEL] === self::STATUS_SUCCESS && sizeof($output[self::TYPE_OUT]) > 0;
+        return $output[self::STATUS_LABEL] === self::STATUS_SUCCESS && preg_match("/".$dockerImage->name()."/", $output[self::TYPE_OUT]);
     }
 
     /**
@@ -34,11 +37,9 @@ class Docker
      */
     public static function run(DockerImage $dockerImage): array
     {
-        $cmd = ["docker", "run", "-d", "--rm", "--name", $dockerImage->name, $dockerImage->tag];
+        $cmd = ["docker", "run", "-d", "--rm", "--name", $dockerImage->name(), $dockerImage->tag];
 
-        if(!self::running($dockerImage)) {
-            return self::execute($cmd, $dockerImage->app->fs_path);
-        }
+        return self::execute($cmd, $dockerImage->app->fs_path);
     }
 
     /**
@@ -49,7 +50,7 @@ class Docker
      */
     public static function kill(DockerImage $dockerImage): array
     {
-        $cmd = ["docker", "kill", $dockerImage->name];
+        $cmd = ["docker", "kill", $dockerImage->name()];
 
         return self::execute($cmd, $dockerImage->app->fs_path);
     }
@@ -62,17 +63,15 @@ class Docker
      */
     public static function restart(DockerImage $dockerImage): array
     {
-        if(!self::running($dockerImage)) {
-            return self::start($dockerImage);
+        if(self::running($dockerImage)) {
+            self::kill($dockerImage);
         }
 
-        $cmd = ["docker", "restart", $dockerImage->name];
-
-        self::execute($cmd);
+        return self::run($dockerImage);
     }
 
     private static function execute(array $command, string $cwd = null, array $env = null, $input = null, ?float $timeout = 60) {
-        $process = new Process($command, $cwd, env, $input, $timeout);
+        $process = new Process($command, $cwd, $env, $input, $timeout);
 
         $process->run();
 
