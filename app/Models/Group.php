@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Cviebrock\EloquentSluggable\Sluggable;
 
-class App extends Model
+class Group extends Model
 {
     use HasFactory, Sluggable;
 

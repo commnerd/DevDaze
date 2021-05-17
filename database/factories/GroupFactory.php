@@ -3,16 +3,16 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\App;
+use App\Models\Group;
 
-class AppFactory extends Factory
+class GroupFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = App::class;
+    protected $model = Group::class;
 
     /**
      * Define the model's default state.
@@ -28,7 +28,7 @@ class AppFactory extends Factory
         ];
     }
 
-    
+
 
     private function getRandomDir(string $basePath, int $depth = 1) {
         $dirs = glob($basePath . DIRECTORY_SEPARATOR . '*' , GLOB_ONLYDIR);

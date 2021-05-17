@@ -1,4 +1,4 @@
-{!! Form::hidden('app_id', $app ? $app->id : "") !!}
+{!! Form::hidden('group_id', $group ? $group->id : "") !!}
 {!! Form::text('label', 'Image Label', $docker_image ?? '' ? $docker_image->label : "") !!}
 {!!
     Form::text('tag', 'Image Tag', $docker_image ?? '' ? $docker_image->tag : "")

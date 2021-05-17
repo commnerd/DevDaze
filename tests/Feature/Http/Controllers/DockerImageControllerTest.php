@@ -4,12 +4,12 @@ namespace Tests\Feature\Http\Controllers;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\DockerImage;
-use App\Models\App;
+use App\Models\Group;
 use Tests\TestCase;
 
 class DockerImageControllerTest extends TestCase
 {
-    private $requiredFields = ["app_id", "label", "tag"];
+    private $requiredFields = ["group_id", "label", "tag"];
 
     /**
      * A single docker image index page test
@@ -23,8 +23,7 @@ class DockerImageControllerTest extends TestCase
             "tag" => "image:latest",
         ]);
 
-        $response = $this->get(route('apps.edit', $dockerImage->app->id));
-
+        $response = $this->get(route('groups.edit', $dockerImage->group->id));
         $response->assertStatus(200);
 
         $response->assertSee("Woot!");
@@ -32,16 +31,15 @@ class DockerImageControllerTest extends TestCase
     }
 
     /**
-     * An app create test
+     * An group create test
      *
      * @return void
      */
     public function testDockerImageCreate()
     {
-        $appId = App::factory()->create()->id;
+        $groupId = Group::factory()->create()->id;
 
-        $response = $this->get(route('apps.docker_images.create', $appId));
-
+        $response = $this->get(route('groups.docker_images.create', $groupId));
         $response->assertStatus(200);
 
         $response->assertSee('Image Label');
@@ -59,10 +57,10 @@ class DockerImageControllerTest extends TestCase
      */
     public function testDockerImageStore()
     {
-        $appId = App::factory()->create()->id;
+        $groupId = Group::factory()->create()->id;
 
-        $response = $this->post(route('apps.docker_images.store', $appId), [
-            "app_id" => $appId,
+        $response = $this->post(route('groups.docker_images.store', $groupId), [
+            "group_id" => $groupId,
             "label" => "Foo!",
             "tag" => "bar",
         ]);
@@ -72,7 +70,7 @@ class DockerImageControllerTest extends TestCase
 
         $dockerImage = DockerImage::findOrFail(1);
 
-        $this->assertEquals($appId, $dockerImage->app_id);
+        $this->assertEquals($groupId, $dockerImage->group_id);
         $this->assertEquals("Foo!", $dockerImage->label);
         $this->assertEquals("bar", $dockerImage->tag);
         $this->assertEquals("foo", $dockerImage->slug);
@@ -87,7 +85,7 @@ class DockerImageControllerTest extends TestCase
     {
         $dockerImage = DockerImage::factory()->create();
 
-        $response = $this->get(route('apps.docker_images.edit', [$dockerImage->app->id, $dockerImage->id]));
+        $response = $this->get(route('groups.docker_images.edit', [$dockerImage->group->id, $dockerImage->id]));
 
         $response->assertStatus(200);
 
@@ -110,14 +108,14 @@ class DockerImageControllerTest extends TestCase
     {
         $dockerImage = DockerImage::factory()->create();
 
-        $response = $this->put(route('apps.docker_images.update', [$dockerImage->app->id, $dockerImage->id]), [
-            "app_id" => $dockerImage->app->id,
+        $response = $this->put(route('groups.docker_images.update', [$dockerImage->group->id, $dockerImage->id]), [
+            "group_id" => $dockerImage->group->id,
             "label" => "Foo!",
             "tag" => "nginx:latest",
         ]);
 
         $response->assertStatus(302);
-        
+
         $dockerImage = DockerImage::findOrFail(1);
 
         $this->assertEquals("Foo!", $dockerImage->label);
@@ -136,10 +134,10 @@ class DockerImageControllerTest extends TestCase
 
         $this->assertEquals(1, DockerImage::count());
 
-        $response = $this->delete(route('apps.docker_images.destroy', [$dockerImage->app->id, $dockerImage->id]));
+        $response = $this->delete(route('groups.docker_images.destroy', [$dockerImage->group->id, $dockerImage->id]));
 
         $response->assertStatus(302);
-        
+
         $this->assertEquals(0, DockerImage::count());
     }
 
@@ -153,12 +151,12 @@ class DockerImageControllerTest extends TestCase
         foreach($this->requiredFields as $requiredField) {
             $dockerImage = DockerImage::factory()->make();
 
-            $appId = $dockerImage->app->id;
+            $groupId = $dockerImage->group->id;
 
             // Fail creation
             $value = $dockerImage->{$requiredField};
             $dockerImage->{$requiredField} = "";
-            $response = $this->post(route('apps.docker_images.store', $appId), $dockerImage->toArray());
+            $response = $this->post(route('groups.docker_images.store', $groupId), $dockerImage->toArray());
 
             // Assert creation failure
             $response->assertStatus(302);
@@ -168,7 +166,7 @@ class DockerImageControllerTest extends TestCase
 
             if(is_null(DockerImage::first())) {
                 $dockerImage = DockerImage::factory()->create([
-                    'app_id' => $appId,
+                    'group_id' => $groupId,
                 ]);
             }
             $dockerImage = DockerImage::first();
@@ -177,7 +175,7 @@ class DockerImageControllerTest extends TestCase
             // Fail update
             $value = $dockerImage->{$requiredField};
             $dockerImage->{$requiredField} = "";
-            $response = $this->put(route('apps.docker_images.update', [$appId, $dockerImage->id]), $dockerImage->toArray());
+            $response = $this->put(route('groups.docker_images.update', [$groupId, $dockerImage->id]), $dockerImage->toArray());
 
             // Assert update failure
             $response->assertStatus(302);

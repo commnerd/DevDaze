@@ -1,7 +1,7 @@
 @extends('layouts.page')
 
 @section('body')
-    {!! Form::open()->route('apps.store') !!}
-        @include('apps.form')
+    {!! Form::open()->route('groups.store') !!}
+        @include('groups.form')
     {!! Form::close() !!}
 @endsection

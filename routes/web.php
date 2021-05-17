@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\AppController;
 use App\Http\Controllers\DockerImageController;
+use App\Http\Controllers\GroupController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,8 +16,8 @@ use App\Http\Controllers\DockerImageController;
 |
 */
 
-Route::get('/', [AppController::class, 'index'])->name('apps.index');
-Route::resource('apps', AppController::class)->except(['index', 'show']);
-Route::name('apps.')->prefix('apps')->group(function() {
-    Route::resource('{app}/docker_images', DockerImageController::class)->except(['index', 'show']);
+Route::get('/', [GroupController::class, 'index'])->name('groups.index');
+Route::resource('groups', GroupController::class)->except(['index', 'show']);
+Route::name('groups.')->prefix('groups')->group(function() {
+    Route::resource('{group}/docker_images', DockerImageController::class)->except(['index', 'show']);
 });

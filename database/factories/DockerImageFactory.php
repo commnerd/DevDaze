@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\DockerImage;
-use App\Models\App;
+use App\Models\Group;
 
 class DockerImageFactory extends Factory
 {
@@ -24,7 +24,7 @@ class DockerImageFactory extends Factory
     {
         $label = $this->faker->words(rand(1, 3), true);
         return [
-            "app_id" => App::factory()->create(["title" => "App for \"$label\" docker image"])->id,
+            "group_id" => Group::factory()->create(["title" => "Group for \"$label\" docker image"])->id,
             "label" => $label,
             "tag" => $this->faker->word().":latest",
         ];

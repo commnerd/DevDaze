@@ -12,19 +12,19 @@
     <div class="col-12">
         <h2 class="d-flex justify-content-center">Projects</h2>
     </div
-    @if(sizeof($apps) > 0)
+    @if(sizeof($groups) > 0)
         <div class="row">
             <table width="100%">
-                @foreach($apps as $app)
+                @foreach($groups as $group)
                 <tr>
                     <td>
-                        <a href="{{ route('apps.edit', $app->id) }}">{{ $app->title }}</a>
+                        <a href="{{ route('groups.edit', $group->id) }}">{{ $group->title }}</a>
                     </td>
                     <td>
-                        <a href="{{ $app->url }}">{{ $app->url }}</a>
+                        <a href="{{ $group->url }}">{{ $group->url }}</a>
                     </td>
                     <td>
-                        {!! Form::open()->formInLine()->route('apps.destroy', compact('app'))->delete() !!}
+                        {!! Form::open()->formInLine()->route('groups.destroy', compact('group'))->delete() !!}
                             <input type="submit" value="Delete" />
                         {!! Form::close() !!}
                     </td>
@@ -35,13 +35,13 @@
     @else
         <div class="row">
                 <div class="col-12">
-                    No applications currently running.
+                    No groups.
                 </div>
         </div>
     @endif
     <div class="row">
         <div class="col-12">
-            <a href="{{ route('apps.create') }}" class="btn btn-primary">Add Project</a>
+            <a href="{{ route('groups.create') }}" class="btn btn-primary">Add Group</a>
         </div>
         
     </div>

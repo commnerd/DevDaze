@@ -24,7 +24,7 @@ class Docker
     {
         $cmd = ["docker", "ps", "--filter", "name=".$dockerImage->name()];
 
-        $output = self::execute($cmd, $dockerImage->app->fs_path);
+        $output = self::execute($cmd, $dockerImage->group->fs_path);
 
         return $output[self::STATUS_LABEL] === self::STATUS_SUCCESS && preg_match("/".$dockerImage->name()."/", $output[self::TYPE_OUT]);
     }
@@ -39,7 +39,7 @@ class Docker
     {
         $cmd = ["docker", "run", "-d", "--rm", "--name", $dockerImage->name(), $dockerImage->tag];
 
-        return self::execute($cmd, $dockerImage->app->fs_path);
+        return self::execute($cmd, $dockerImage->group->fs_path);
     }
 
     /**
@@ -52,7 +52,7 @@ class Docker
     {
         $cmd = ["docker", "kill", $dockerImage->name()];
 
-        return self::execute($cmd, $dockerImage->app->fs_path);
+        return self::execute($cmd, $dockerImage->group->fs_path);
     }
 
     /**

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker run -d --rm --name dev-daze -v /:/host -v ${HOME}:${HOME} -p 80:80 commnerd/dev_daze

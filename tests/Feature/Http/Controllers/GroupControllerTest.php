@@ -3,42 +3,41 @@
 namespace Tests\Feature\Http\Controllers;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\App;
+use App\Models\Group;
 use Tests\TestCase;
 
-class AppControllerTest extends TestCase
+class GroupControllerTest extends TestCase
 {
     private $requiredFields = ["title", "fs_path", "url"];
-    
+
     /**
-     * An empty app index page test.
+     * An empty group index page test.
      *
      * @return void
      */
-    public function testEmptyAppList()
+    public function testEmptyGroupList()
     {
-        $response = $this->get(route('apps.index'));
+        $response = $this->get(route('groups.index'));
 
         $response->assertStatus(200);
 
-        $response->assertSee("No applications currently running.");
+        $response->assertSee("No groups.");
     }
 
     /**
-     * A single app index page test
+     * A single group index page test
      *
      * @return void
      */
-    public function testAppList()
+    public function testGroupList()
     {
-        App::factory()->create([
+        Group::factory()->create([
             "title" => "Woot!",
             "fs_path" => "/tmp",
             "url" => "woot",
         ]);
 
-        $response = $this->get(route('apps.index'));
-
+        $response = $this->get(route('groups.index'));
         $response->assertStatus(200);
 
         $response->assertSee("Woot!");
@@ -46,13 +45,13 @@ class AppControllerTest extends TestCase
     }
 
     /**
-     * An app create test
+     * An group create test
      *
      * @return void
      */
-    public function testAppCreate()
+    public function testGroupCreate()
     {
-        $response = $this->get(route('apps.create'));
+        $response = $this->get(route('groups.create'));
 
         $response->assertStatus(200);
 
@@ -67,43 +66,43 @@ class AppControllerTest extends TestCase
     }
 
     /**
-     * An app store test
+     * An group store test
      *
      * @return void
      */
-    public function testAppStore()
+    public function testGroupStore()
     {
-        $response = $this->post(route('apps.store'), [
+        $response = $this->post(route('groups.store'), [
             "title" => "Woot!",
             "fs_path" => "/tmp",
             "url" => "woot",
         ]);
 
         $response->assertStatus(302);
-        $response->assertRedirect(route('apps.index'));
-        
-        $app = App::findOrFail(1);
+        $response->assertRedirect(route('groups.index'));
 
-        $this->assertEquals("Woot!", $app->title);
-        $this->assertEquals("/tmp", $app->fs_path);
-        $this->assertEquals("woot", $app->url);
-        $this->assertEquals("woot", $app->slug);
+        $group = Group::findOrFail(1);
+
+        $this->assertEquals("Woot!", $group->title);
+        $this->assertEquals("/tmp", $group->fs_path);
+        $this->assertEquals("woot", $group->url);
+        $this->assertEquals("woot", $group->slug);
     }
 
     /**
-     * An app edit test
+     * An group edit test
      *
      * @return void
      */
-    public function testAppEdit()
+    public function testGroupEdit()
     {
-        App::factory()->create([
+        Group::factory()->create([
             "title" => "Woot!",
             "fs_path" => "/tmp",
             "url" => "woot",
         ]);
 
-        $response = $this->get(route('apps.edit', 1));
+        $response = $this->get(route('groups.edit', 1));
 
         $response->assertStatus(200);
 
@@ -121,74 +120,74 @@ class AppControllerTest extends TestCase
     }
 
     /**
-     * An app update test
+     * An group update test
      *
      * @return void
      */
-    public function testAppUpdate()
+    public function testGroupUpdate()
     {
-        App::factory()->create([
+        Group::factory()->create([
             "title" => "Woot!",
             "fs_path" => "/tmp",
             "url" => "woot",
         ]);
 
-        $app = App::findOrFail(1);
-        $this->assertEquals("Woot!", $app->title);
-        $this->assertEquals("/tmp", $app->fs_path);
-        $this->assertEquals("woot", $app->url);
-        $this->assertEquals("woot", $app->slug);
+        $group = Group::findOrFail(1);
+        $this->assertEquals("Woot!", $group->title);
+        $this->assertEquals("/tmp", $group->fs_path);
+        $this->assertEquals("woot", $group->url);
+        $this->assertEquals("woot", $group->slug);
 
-        $response = $this->put(route('apps.update', 1), [
+        $response = $this->put(route('groups.update', 1), [
             "title" => "Foo!",
             "fs_path" => "/tmp/changed",
             "url" => "bar",
         ]);
 
         $response->assertStatus(302);
-        $response->assertRedirect(route('apps.index'));
-        
-        $app = App::findOrFail(1);
+        $response->assertRedirect(route('groups.index'));
 
-        $this->assertEquals("Foo!", $app->title);
-        $this->assertEquals("/tmp/changed", $app->fs_path);
-        $this->assertEquals("bar", $app->url);
-        $this->assertEquals("foo", $app->slug);
+        $group = Group::findOrFail(1);
+
+        $this->assertEquals("Foo!", $group->title);
+        $this->assertEquals("/tmp/changed", $group->fs_path);
+        $this->assertEquals("bar", $group->url);
+        $this->assertEquals("foo", $group->slug);
     }
 
     /**
-     * An app destroy test
+     * An group destroy test
      *
      * @return void
      */
-    public function testAppDestroy()
+    public function testGroupDestroy()
     {
-        App::factory()->create();
+        Group::factory()->create();
 
-        $this->assertEquals(1, App::count());
+        $this->assertEquals(1, Group::count());
 
-        $response = $this->delete(route('apps.destroy', 1));
+        $response = $this->delete(route('groups.destroy', 1));
 
         $response->assertStatus(302);
-        $response->assertRedirect(route('apps.index'));
-        
-        $this->assertEquals(0, App::count());
+        $response->assertRedirect(route('groups.index'));
+
+        $this->assertEquals(0, Group::count());
     }
 
     /**
-     * An app required validation test
+     * An group required validation test
      *
      * @return void
      */
-    public function testAppRequiredValidations()
+    public function testGroupRequiredValidations()
     {
         foreach($this->requiredFields as $requiredField) {
-            $app = App::factory()->make();
+            $group = Group::factory()->make();
 
             // Fail creation
-            $value = $app->{$requiredField};
-            $app->{$requiredField} = "";
-            $response = $this->post(route('apps.store'), $app->toArray());
+            $value = $group->{$requiredField};
+            $group->{$requiredField} = "";
+            $response = $this->post(route('groups.store'), $group->toArray());
 
             // Assert creation failure
             $response->assertStatus(302);
@@ -196,13 +195,13 @@ class AppControllerTest extends TestCase
                 $requiredField => "The ".str_replace("_", " ", $requiredField)." field is required.",
             ]);
 
-            $app->{$requiredField} = $value;
-            $app = App::create($app->toArray());
+            $group->{$requiredField} = $value;
+            $group = Group::create($group->toArray());
 
             // Fail update
-            $value = $app->{$requiredField};
-            $app->{$requiredField} = "";
-            $response = $this->put(route('apps.update', $app->id), $app->toArray());
+            $value = $group->{$requiredField};
+            $group->{$requiredField} = "";
+            $response = $this->put(route('groups.update', $group->id), $group->toArray());
 
             // Assert update failure
             $response->assertStatus(302);

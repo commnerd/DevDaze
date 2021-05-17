@@ -16,14 +16,14 @@ class DockerImage extends Model implements DockerImageDescendant
 
     public function validations() {
         return [
-            'app_id' => 'required',
+            'group_id' => 'required',
             'label' => 'required',
             'tag' => 'required',
         ];
     }
 
     protected $fillable = [
-        "app_id",
+        "group_id",
         "label",
         "tag",
     ];
@@ -35,17 +35,17 @@ class DockerImage extends Model implements DockerImageDescendant
      */
     public function name(): string
     {
-        return $this->app->slug."_".$this->slug;
+        return $this->group->slug."_".$this->slug;
     }
 
     /**
-     * The app relationship
+     * The group relationship
      *
      * @return BelongsTo
      */
-    public function app(): BelongsTo
+    public function group(): BelongsTo
     {
-        return $this->belongsTo(App::class);
+        return $this->belongsTo(group::class);
     }
 
     /**

@@ -7,60 +7,60 @@ use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Traits\BumpsService;
 use App\Models\DockerImage;
-use App\Models\App;
+use App\Models\Group;
 
 class DockerImageController extends Controller
 {
     use BumpsService;
-    
+
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \App\Models\App  $app
+     * @param  \App\Models\Group  $group
      * @return \Illuminate\Http\Response
      */
-    public function create(App $app): Response
+    public function create(Group $group): Response
     {
-        return response()->view('apps.docker_images.create', compact('app'));
+        return response()->view('groups.docker_images.create', compact('group'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\App  $app
+     * @param  \App\Models\Group  $group
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, App $app): RedirectResponse
+    public function store(Request $request, Group $group): RedirectResponse
     {
         $this->validate($request, (new DockerImage)->validations());
 
-        $app->docker_images()->create($request->all());
+        $group->docker_images()->create($request->all());
 
-        return redirect()->route('apps.edit', compact('app'));
+        return redirect()->route('groups.edit', compact('group'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\App  $app
+     * @param  \App\Models\Group  $group
      * @param  \App\Models\DockerImage  $dockerImage
      * @return \Illuminate\Http\Response
      */
-    public function edit(App $app, DockerImage $docker_image): Response
+    public function edit(Group $group, DockerImage $docker_image): Response
     {
-        return response()->view('apps.docker_images.edit', compact('app', 'docker_image'));
+        return response()->view('groups.docker_images.edit', compact('group', 'docker_image'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\App  $app
+     * @param  \App\Models\Group  $group
      * @param  \App\Models\DockerImage  $dockerImage
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, App $app, DockerImage $docker_image): RedirectResponse
+    public function update(Request $request, Group $group, DockerImage $docker_image): RedirectResponse
     {
         $this->validate($request, $docker_image->validations());
 
@@ -68,20 +68,20 @@ class DockerImageController extends Controller
         $docker_image->slug = null;
         $docker_image->update($request->all());
 
-        return redirect()->route('apps.edit', compact('app'));
+        return redirect()->route('groups.edit', compact('group'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\App  $app
+     * @param  \App\Models\Group  $group
      * @param  \App\Models\DockerImage  $dockerImage
      * @return \Illuminate\Http\Response
      */
-    public function destroy(App $app, DockerImage $dockerImage)
+    public function destroy(Group $group, DockerImage $dockerImage)
     {
         $dockerImage->delete();
 
-        return redirect()->route('apps.edit', $app->id);
+        return redirect()->route('groups.edit', $group->id);
     }
 }

@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
-use App\Models\App;
+use App\Models\Group;
 
-class AppController extends Controller
+class GroupController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,8 @@ class AppController extends Controller
      */
     public function index(): Response
     {
-        $apps = App::all();
-        return response()->view('index', compact('apps'));
+        $groups = Group::all();
+        return response()->view('index', compact('groups'));
     }
 
     /**
@@ -27,7 +27,7 @@ class AppController extends Controller
      */
     public function create(): Response
     {
-        return response()->view('apps.create', ['app' => null]);
+        return response()->view('groups.create', ['group' => null]);
     }
 
     /**
@@ -38,52 +38,52 @@ class AppController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $this->validate($request, (new App)->validations());
+        $this->validate($request, (new Group)->validations());
 
-        App::create($request->all());
+        Group::create($request->all());
 
-        return redirect()->route('apps.index');
+        return redirect()->route('groups.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\App  $app
+     * @param  \App\Models\Group  $group
      * @return \Illuminate\Http\Response
      */
-    public function edit(App $app): Response
+    public function edit(Group $group): Response
     {
-        return response()->view('apps.edit', compact('app'));
+        return response()->view('groups.edit', compact('group'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\App  $app
+     * @param  \App\Models\Group  $group
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, App $app): RedirectResponse
+    public function update(Request $request, Group $group): RedirectResponse
     {
-        $this->validate($request, (new App)->validations());
+        $this->validate($request, (new Group)->validations());
 
         // Purge the slug for regeneration per https://github.com/cviebrock/eloquent-sluggable#onupdate
-        $app->slug = null;
-        $app->update($request->all());
+        $group->slug = null;
+        $group->update($request->all());
 
-        return redirect()->route('apps.index');
+        return redirect()->route('groups.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\App  $app
+     * @param  \App\Models\Group  $group
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(App $app): RedirectResponse
+    public function destroy(Group $group): RedirectResponse
     {
-        $app->delete();
+        $group->delete();
 
-        return redirect()->route('apps.index');
+        return redirect()->route('groups.index');
     }
 }

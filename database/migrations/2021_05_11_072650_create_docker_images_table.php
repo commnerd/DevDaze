@@ -15,7 +15,7 @@ class CreateDockerImagesTable extends Migration
     {
         Schema::create('docker_images', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('app_id')
+            $table->foreignId('group_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

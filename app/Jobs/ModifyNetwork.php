@@ -32,6 +32,6 @@ class BumpService implements ShouldQueue
      */
     public function handle()
     {
-        Docker::restart($this->dockerImage);
+        Docker::network($this->dockerImage);
     }
 }
