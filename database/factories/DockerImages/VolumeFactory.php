@@ -2,8 +2,9 @@
 
 namespace Database\Factories\DockerImages;
 
-use App\Models\DockerImages\Volume;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\DockerImages\Volume;
+use App\Models\DockerImage;
 
 class VolumeFactory extends Factory
 {
@@ -22,7 +23,9 @@ class VolumeFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'docker_image_id' => DockerImage::factory()->create(["title" => "Docker image for \"/tmp\" volume declaration"])->id,
+            'host_path' => "/tmp",
+            'container_path' => "/tmp",
         ];
     }
 }

@@ -21,6 +21,7 @@ class CreateEnvsTable extends Migration
                 ->onDelete('cascade');
             $table->string("label");
             $table->string("value");
+            $table->unique(['docker_image_id', 'label']);
             $table->timestamps();
         });
     }

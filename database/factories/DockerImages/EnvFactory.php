@@ -21,8 +21,11 @@ class EnvFactory extends Factory
      */
     public function definition()
     {
+        $env = strtoupper($this->faker->word());
         return [
-            //
+            'docker_image_id' => DockerImage::factory()->create(["title" => "Docker image for \"$env\" port declaration"])->id,
+            'label' => $env,
+            'value' => $this->faker->word(),
         ];
     }
 }

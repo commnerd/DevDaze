@@ -77,7 +77,7 @@ class DockerImage extends Model implements DockerImageDescendant
      *
      * @return DockerImage
      */
-    public function getDockerImage(): DockerImage {
+    public function getDockerImageAttribute(): DockerImage {
         return $this;
     }
 }

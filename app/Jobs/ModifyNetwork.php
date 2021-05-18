@@ -7,22 +7,23 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Bus\Queueable;
-use App\Models\DockerImage;
 use App\Services\Docker;
+use App\Models\Group;
 
-class BumpService implements ShouldQueue
+class ModifyNetwork implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private DockerImage $dockerImage;
+    private Group $group;
+    
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(DockerImage $dockerImage)
+    public function __construct(Group $group)
     {
-        $this->dockerImage = $dockerImage;
+        $this->group = $group;
     }
 
     /**
@@ -32,6 +33,6 @@ class BumpService implements ShouldQueue
      */
     public function handle()
     {
-        Docker::network($this->dockerImage);
+        Docker::network($this->group);
     }
 }

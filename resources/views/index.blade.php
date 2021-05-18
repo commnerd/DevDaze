@@ -43,6 +43,10 @@
         <div class="col-12">
             <a href="{{ route('groups.create') }}" class="btn btn-primary">Add Group</a>
         </div>
-        
+    </div>
+    <div class="row snap-bottom" style="align-self: flex-end">
+        <div class="col-12">
+            <iframe src="http://localhost:7681" width="100%"></iframe>
+        </div>
     </div>
 @endsection

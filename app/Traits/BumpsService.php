@@ -12,6 +12,6 @@ trait BumpsService {
     public function save(array $options = []) {
         parent::save($options);
 
-        $this->dispatch(new BumpService($this->getDockerImage()));
+        $this->dispatch(new BumpService($this->docker_image));
     }
 }

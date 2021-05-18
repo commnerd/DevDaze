@@ -19,8 +19,9 @@ class CreateVolumesTable extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->string("host_path");
+            $table->string("host_path")->nullable();
             $table->string("container_path");
+            $table->unique(['docker_image_id', 'container_path']);
             $table->timestamps();
         });
     }

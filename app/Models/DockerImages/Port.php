@@ -3,15 +3,11 @@
 namespace App\Models\DockerImages;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Interfaces\DockerImageDescendant;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\BumpsService;
-use App\Models\DockerImage;
 
-class Env extends Model implements DockerImageDescendant
+class Port extends Model
 {
-    use HasFactory, BumpsService;
+    use HasFactory;
 
     /**
      * The docker image relationship

@@ -2,8 +2,8 @@
 
 namespace Database\Factories\DockerImages;
 
-use App\Models\DockerImage\Port;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\DockerImage\Port;
 
 class PortFactory extends Factory
 {
@@ -22,7 +22,9 @@ class PortFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'docker_image_id' => DockerImage::factory()->create(["title" => "Docker image for \"42\" port declaration"])->id,
+            'host_port' => 42,
+            'container_port' => 42,
         ];
     }
 }

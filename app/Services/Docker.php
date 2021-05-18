@@ -70,6 +70,27 @@ class Docker
         return self::run($dockerImage);
     }
 
+    public static function update_network(Group $group): array
+    {
+        if(self::execute(sprintf('docker network ls --filter "name=%s" --format "{{.Name}}"', $group->slug)[self::TYPE_OUT] !== $group->slug)) {
+
+        }
+    }
+
+    public static function add_network(Group $group): array
+    {
+        if(self::execute(sprintf('docker network ls --filter "name=%s" --format "{{.Name}}"', $group->slug)[self::TYPE_OUT] !== $group->slug)) {
+
+        }
+    }
+
+    public static function remove_network(Group $group): array
+    {
+        if(self::execute(sprintf('docker network ls --filter "name=%s" --format "{{.Name}}"', $group->slug)[self::TYPE_OUT] !== $group->slug)) {
+
+        }
+    }
+
     private static function execute(array $command, string $cwd = null, array $env = null, $input = null, ?float $timeout = 60) {
         $process = new Process($command, $cwd, $env, $input, $timeout);
 

@@ -19,8 +19,9 @@ class CreatePortsTable extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->integer("host_port");
+            $table->integer("host_port")->nullable();
             $table->integer("container_port");
+            $table->unique(['docker_image_id', 'container_port']);
             $table->timestamps();
         });
     }

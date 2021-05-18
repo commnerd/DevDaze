@@ -4,6 +4,7 @@ SHELL ["/bin/bash", "-c"]
 
 ENV USER ${USER}
 ENV PHP_VERSION 8.0
+VOLUME /host
 
 RUN apt-get update -y && \
     apt-get install -y software-properties-common && \
@@ -78,9 +79,9 @@ RUN cd /tmp && \
     make && make install
 
 # Add ttyd supervisord config
-RUN mkdir -p /var/log/ttyd\n\
+RUN mkdir -p /var/log/ttyd && \
     echo $'[program:ttyd]\n\
-command=/usr/local/bin/ttyd -p 7681\n\
+command=/usr/local/bin/ttyd bash\n\
 priority=900\n\
 stdout_logfile=/var/log/ttyd/ttyd.log\n\
 stderr_logfile=/var/log/ttyd/error.log\n\
