@@ -1,13 +1,24 @@
 FROM ubuntu:latest
 
-SHELL ["/bin/bash", "-c"]
+SHELL ["/usr/bin/bash", "-c"]
 
 ENV USER ${USER}
 ENV PHP_VERSION 8.0
 VOLUME /host
 
 RUN apt-get update -y && \
-    apt-get install -y apt-utils software-properties-common && \
+    apt-get install -y \
+        apt-utils \
+        software-properties-common \
+        apt-transport-https \
+        ca-certificates \
+        curl \
+        gnupg \
+        lsb-release && \
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
+    echo \
+      "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+      $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
     add-apt-repository ppa:ondrej/php && \
     apt-get update -y && \
     apt-get install -y \
@@ -20,7 +31,8 @@ RUN apt-get update -y && \
     nginx \
     supervisor \
     nodejs \
-    yarnpkg \
+    npm \
+    docker-ce-cli \
     php${PHP_VERSION} \
     php${PHP_VERSION}-fpm \
     php${PHP_VERSION}-mcrypt \
@@ -28,6 +40,9 @@ RUN apt-get update -y && \
     php${PHP_VERSION}-tokenizer && \
     apt-get clean autoclean && \
     apt-get autoremove --yes
+
+#Install yarn
+RUN npm install --global yarn
 
 # Prepare project
 ADD ./ /var/www/html/
@@ -191,34 +206,36 @@ autorestart=true\n\
 user=www-data' > /etc/supervisor/conf.d/yarn-watcher.conf
 
 # Create entrypoint
-RUN echo $'#!/bin/bash\n\
+RUN echo $'#!/usr/bin/bash\n\
+set -e\n\
 \n\
+CMD="$@"\n\
 DEV="false"\n\
 \n\
 while [[ $# -gt 0 ]]\n\
 do\n\
-key="$1"\n\
+   key="$1"\n\
 \n\
-case $key in\n\
-    -d|--dev)\n\
-    DEV="true"\n\
-    shift # past argument\n\
-    ;;\n\
-esac\n\
+   case $key in\n\
+       -d|--dev)\n\
+           DEV="true"\n\
+           shift # past argument\n\
+           ;;\n\
+       *)\n\
+           shift #past argument\n\
+           ;;\n\
+   esac\n\
 done\n\
 \n\
 if [ "$DEV" == "true" ]\n\
 then\n\
-    supervisorctl start yarn-watcher\n\
+   supervisorctl start yarn-watcher\n\
 fi\n\
 \n\
-exec "$@"' > /entrypoint.sh
+exec "$CMD"' > /entrypoint.sh
 
-
-ENTRYPOINT /entrypoint.sh
-
-RUN chown -fR www-data:www-data /var/www/html
-
+RUN chown -fR www-data:www-data /var/www/html && chmod +x /entrypoint.sh
 EXPOSE 80 953 7681
 
+ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "supervisord", "--nodaemon", "-c", "/etc/supervisor/supervisord.conf" ]

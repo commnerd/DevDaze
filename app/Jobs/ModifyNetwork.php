@@ -15,7 +15,7 @@ class ModifyNetwork implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private Group $group;
-    
+
     /**
      * Create a new job instance.
      *
@@ -33,6 +33,6 @@ class ModifyNetwork implements ShouldQueue
      */
     public function handle()
     {
-        Docker::network($this->group);
+        file_put_contents('/tmp', Docker::networkDefined($this->group));
     }
 }

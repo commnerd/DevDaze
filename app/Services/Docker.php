@@ -70,6 +70,19 @@ class Docker
         return self::run($dockerImage);
     }
 
+    /**
+     * Restart a service
+     *
+     * @param Group $group
+     * @return boolean
+     */
+    public static function networkDefined(Group $group): boolean
+    {
+        $cmd = ["docker", "network", "ls", "|", "grep", $group->slug];
+
+        dd(self::execute($cmd));
+    }
+
     public static function update_network(Group $group): array
     {
         if(self::execute(sprintf('docker network ls --filter "name=%s" --format "{{.Name}}"', $group->slug)[self::TYPE_OUT] !== $group->slug)) {
