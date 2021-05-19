@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\DockerImageController;
+use App\Http\Controllers\CatchAllController;
 use App\Http\Controllers\GroupController;
 
 /*
@@ -21,3 +22,4 @@ Route::resource('groups', GroupController::class)->except(['index', 'show']);
 Route::name('groups.')->prefix('groups')->group(function() {
     Route::resource('{group}/docker_images', DockerImageController::class)->except(['index', 'show']);
 });
+Route::any('{catchall}', [CatchAllController::class, 'handle'])->middleware('proxied_path')->where('catchall', '.*');
