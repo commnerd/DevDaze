@@ -1,3 +1,56 @@
 #!/bin/bash
 
-docker run -d --rm --name dev-daze -v /:/host -v ${HOME}:${HOME} -p 953:953 -p 7681:7681 -p 80:80 commnerd/dev_daze
+PROJECT_DIR="$( cd "$( dirname $(dirname "${BASH_SOURCE[0]}") )" &> /dev/null && pwd )"
+WEB_PORT=80
+
+while [[ $# -gt 0 ]]
+do
+    key="$1"
+
+    case $key in
+        -d|--dev)
+        DEV="true"
+        shift # past argument
+        ;;
+        -p|--port)
+        WEB_PORT="$2"
+        shift # past argument
+        shift # past value
+        ;;
+        -h|--help)
+        HELP="true"
+        shift # past argument
+        ;;
+    esac
+done
+
+CMD="docker run -d --rm --name dev-daze -v /:/host -p 953:953 -p 7681:7681 -p $WEB_PORT:80"
+
+if [ "$HELP" == "true" ]
+then
+    echo 'Usage:  daze [OPTIONS]
+
+A docker development tool to make your life easier
+
+Options:
+  -d, --dev                Set up the development environment to develop on the Dev Daze project
+  -p, --port               Declare the web port to host on [defaut: 80])
+  -h, --help               Display this message'
+
+exit 0
+
+fi
+
+if [ "$DEV" == "true" ]
+then
+    CMD="$CMD -v $PROJECT_DIR:/var/www/html"
+fi
+
+CMD="$CMD commnerd/dev_daze"
+
+if [ "$DEV" == "true" ]
+then
+    CMD="$CMD --dev"
+fi
+
+bash -c "$CMD"

@@ -7,7 +7,7 @@ ENV PHP_VERSION 8.0
 VOLUME /host
 
 RUN apt-get update -y && \
-    apt-get install -y software-properties-common && \
+    apt-get install -y apt-utils software-properties-common && \
     add-apt-repository ppa:ondrej/php && \
     apt-get update -y && \
     apt-get install -y \
@@ -19,14 +19,15 @@ RUN apt-get update -y && \
     bind9 \
     nginx \
     supervisor \
+    nodejs \
+    yarnpkg \
     php${PHP_VERSION} \
     php${PHP_VERSION}-fpm \
     php${PHP_VERSION}-mcrypt \
     php${PHP_VERSION}-sqlite \
     php${PHP_VERSION}-tokenizer && \
     apt-get clean autoclean && \
-    apt-get autoremove --yes && \
-    rm -rf /var/lib/{apt,dpkg,cache,log}/
+    apt-get autoremove --yes
 
 # Prepare project
 ADD ./ /var/www/html/
@@ -180,6 +181,41 @@ numprocs=8\n\
 redirect_stderr=true\n\
 stdout_logfile=/var/log/laravel-worker/worker.log\n\
 stopwaitsecs=3600' > /etc/supervisor/conf.d/laravel-worker.conf
+
+# Add laravel worker supervisord config
+RUN mkdir -p /var/log/laravel-worker && \
+echo $'[program:yarn-watcher]\n\
+directory=/var/www/html\n\
+command=yarn watch\n\
+autorestart=true\n\
+user=www-data' > /etc/supervisor/conf.d/yarn-watcher.conf
+
+# Create entrypoint
+RUN echo $'#!/bin/bash\n\
+\n\
+DEV="false"\n\
+\n\
+while [[ $# -gt 0 ]]\n\
+do\n\
+key="$1"\n\
+\n\
+case $key in\n\
+    -d|--dev)\n\
+    DEV="true"\n\
+    shift # past argument\n\
+    ;;\n\
+esac\n\
+done\n\
+\n\
+if [ "$DEV" == "true" ]\n\
+then\n\
+    supervisorctl start yarn-watcher\n\
+fi\n\
+\n\
+exec "$@"' > /entrypoint.sh
+
+
+ENTRYPOINT /entrypoint.sh
 
 RUN chown -fR www-data:www-data /var/www/html
 
