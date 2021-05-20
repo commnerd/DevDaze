@@ -41,29 +41,13 @@ RUN apt-get update -y && \
     apt-get clean autoclean && \
     apt-get autoremove --yes
 
-#Install yarn
-RUN npm install --global yarn
-
-# Prepare project
-ADD ./ /var/www/html/
-WORKDIR /var/www/html
-RUN echo "" > database/database.sqlite && \
-    echo $'APP_NAME="Dev Daze"\n\
-APP_ENV=local\n\
-APP_KEY=\n\
-APP_DEBUG=true\n\
-APP_URL=http://localhost\n\
-\n\
-LOG_CHANNEL=stack\n\
-LOG_LEVEL=debug\n\
-\n\
-DB_CONNECTION=sqlite\n\
-\n\
-BROADCAST_DRIVER=log\n\
-CACHE_DRIVER=file\n\
-QUEUE_CONNECTION=database\n\
-SESSION_DRIVER=file\n\
-SESSION_LIFETIME=120' > .env
+#Install nvm and yarn
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash && \
+    export NVM_DIR="$HOME/.nvm" && \
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && \
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" && \
+    nvm install --lts && \
+    npm install --global yarn
 
 #Prepare supervisord
 RUN echo $'[unix_http_server]\n\
@@ -83,9 +67,7 @@ supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
 serverurl=unix:///var/run/supervisor.sock\n\
 \n\
 [include]\n\
-files = /etc/supervisor/conf.d/*.conf' > /etc/supervisor/supervisord.conf && \
-    php artisan migrate && \
-    php artisan key:generate
+files = /etc/supervisor/conf.d/*.conf' > /etc/supervisor/supervisord.conf
 
 # Build ttyd
 RUN cd /tmp && \
@@ -197,45 +179,73 @@ redirect_stderr=true\n\
 stdout_logfile=/var/log/laravel-worker/worker.log\n\
 stopwaitsecs=3600' > /etc/supervisor/conf.d/laravel-worker.conf
 
-# Add laravel worker supervisord config
-RUN mkdir -p /var/log/laravel-worker && \
-echo $'[program:yarn-watcher]\n\
-directory=/var/www/html\n\
-command=yarn watch\n\
-autorestart=true\n\
-user=www-data' > /etc/supervisor/conf.d/yarn-watcher.conf
+# Add yarn watcher supervisord config
+RUN mkdir -p /var/log/yarn-watcher
 
 # Create entrypoint
 RUN echo $'#!/usr/bin/bash\n\
 set -e\n\
 \n\
-CMD="$@"\n\
-DEV="false"\n\
-\n\
-while [[ $# -gt 0 ]]\n\
-do\n\
-   key="$1"\n\
-\n\
-   case $key in\n\
-       -d|--dev)\n\
-           DEV="true"\n\
-           shift # past argument\n\
-           ;;\n\
-       *)\n\
-           shift #past argument\n\
-           ;;\n\
-   esac\n\
-done\n\
-\n\
-if [ "$DEV" == "true" ]\n\
+chmod -fR a+w /var/www/html/storage\n\
+if [[ "${1:0:1}" == "-" ]]\n\
 then\n\
-   supervisorctl start yarn-watcher\n\
+    while [[ $# -gt 0 ]]\n\
+    do\n\
+        key="$1"\n\
+        case $key in\n\
+            -d|--dev)\n\
+                echo "[program:yarn-watcher]\n\
+directory=/var/www/html\n\
+command=/bin/bash -c \'source /root/.nvm/nvm.sh && nvm use --lts && yarn watch\'\n\
+stdout_logfile=/var/log/yarn-watcher/output.log\n\
+stderr_logfile=/var/log/yarn-watcher/error.log\n\
+autorestart=true\n\
+user=root" > /etc/supervisor/conf.d/yarn-watcher.conf\n\
+                shift # past argument\n\
+                ;;\n\
+            *)\n\
+                echo "Error: \\\"$1\\\" is not a valid option" 1>&2\n\
+                exit 1\n\
+                ;;\n\
+        esac\n\
+    done\n\
 fi\n\
 \n\
-exec "$CMD"' > /entrypoint.sh
+if [ "$(which $@ 2>/dev/null)" ]\n\
+then\n\
+    exec $@\n\
+fi\n\
+\n\
+exec supervisord --nodaemon -c /etc/supervisor/supervisord.conf' > /entrypoint.sh && \
+    chmod +x /entrypoint.sh
 
-RUN chown -fR www-data:www-data /var/www/html && chmod +x /entrypoint.sh
+# Prepare project
+ADD ./ /var/www/html/
+WORKDIR /var/www/html
+RUN echo "" > database/database.sqlite && \
+    echo $'APP_NAME="Dev Daze"\n\
+APP_ENV=local\n\
+APP_KEY=\n\
+APP_DEBUG=true\n\
+APP_URL=http://localhost\n\
+\n\
+LOG_CHANNEL=stack\n\
+LOG_LEVEL=debug\n\
+\n\
+DB_CONNECTION=sqlite\n\
+\n\
+BROADCAST_DRIVER=log\n\
+CACHE_DRIVER=file\n\
+QUEUE_CONNECTION=database\n\
+SESSION_DRIVER=file\n\
+SESSION_LIFETIME=120' > .env && \
+    php artisan migrate && \
+    php artisan key:generate && \
+    echo "Setting permissions..." && \
+    chown -fR www-data:www-data /var/www/html
+
 EXPOSE 80 953 7681
 
 ENTRYPOINT [ "/entrypoint.sh" ]
-CMD [ "supervisord", "--nodaemon", "-c", "/etc/supervisor/supervisord.conf" ]
+
+CMD [ "/usr/bin/supervisord", "--nodaemon", "-c /etc/supervisor/supervisord.conf" ]
