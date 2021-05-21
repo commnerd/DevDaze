@@ -27,7 +27,7 @@ do
     esac
 done
 
-CMD="docker run -it --rm --name dev-daze -v /:/host -p 953:953 -p 7681:7681 -p $WEB_PORT:80"
+CMD="docker run -d --rm --name dev-daze -v /:/host -p 953:953 -p 7681:7681 -p $WEB_PORT:80"
 
 if [ "$HELP" == "true" ]
 then

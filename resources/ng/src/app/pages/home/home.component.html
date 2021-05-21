@@ -1,0 +1,22 @@
+<header class="row">
+    <h1 class="d-flex justify-content-center">Dev Daze</h1>
+</header>
+<section class="row">
+  <div class="col-12">
+    <h2 class="d-flex justify-content-center">Projects</h2>
+    <div class="row" *ngFor="let group of groups$ | async">
+      <div class="col-3">{{ group.title }}</div>
+      <div class="col-3">{{ group.fs_path }}</div>
+      <div class="col-3"><a href="{{ group.url }}">{{ group.url }}</a></div>
+      <div class="col-3 d-flex justify-content-center"><button (click)="delete(group.id!)">Delete</button></div>
+    </div>
+    <div class="row">
+      <div class="col-12"><a [routerLink]="['/group/create']" class="btn btn-primary">Add Group</a></div>
+    </div>
+  </div>
+</section>
+<section class="row fixed-bottom">
+  <div class=""col-12>
+    <iframe src="http://localhost:7681"></iframe>
+  </div>
+</section>

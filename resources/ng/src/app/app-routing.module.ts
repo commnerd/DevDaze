@@ -1,7 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [];
+import { HomeComponent } from "@pages/home/home.component";
+import { CreateComponent as GroupCreateComponent } from "@pages/group/create/create.component";
+
+
+const routes: Routes = [
+  { path: "", component: HomeComponent },
+  { path: "group/create", component: GroupCreateComponent }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

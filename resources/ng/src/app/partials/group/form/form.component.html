@@ -1,0 +1,15 @@
+<form [formGroup]="groupForm" (ngSubmit)="submit()">
+  <div class="form-group">
+    <label for="group-title">Email address</label>
+    <input type="text" class="form-control" id="group-title" placeholder="Title" formControlName="title">
+  </div>
+  <div class="form-group">
+    <label for="group-fs-path">FS Path</label>
+    <input type="text" class="form-control" id="group-fs-path" placeholder="/path/to/project" formControlName="fs_path">
+  </div>
+  <div class="form-group">
+    <label for="group-fs-path">URL</label>
+    <input type="text" class="form-control" id="group-url" placeholder="Full or Partial path" formControlName="url">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
