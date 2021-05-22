@@ -28,12 +28,11 @@ export class FormComponent implements OnInit {
 
   submit() {
     if(this.groupForm.valid) {
-      this.http.post<Group>('http://localhost:9091/api/v1/group', this.groupForm.value)
+      let subscription = this.http.post<Group>('/api/v1/group', this.groupForm.value)
         .subscribe(() => {
+          subscription.unsubscribe();
           this.router.navigate(["/"]);
         })
-        .unsubscribe();
     }
   }
-
 }

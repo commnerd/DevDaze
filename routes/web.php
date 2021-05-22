@@ -17,9 +17,5 @@ use App\Http\Controllers\GroupController;
 |
 */
 
-Route::get('/', [GroupController::class, 'index'])->name('groups.index');
-Route::resource('groups', GroupController::class)->except(['index', 'show']);
-Route::name('groups.')->prefix('groups')->group(function() {
-    Route::resource('{group}/docker_images', DockerImageController::class)->except(['index', 'show']);
-});
-Route::any('{catchall}', [CatchAllController::class, 'handle'])->middleware('proxied_path')->where('catchall', '.*');
+Route::any('{catchall}', [CatchAllController::class, 'handle'])
+    ->where('catchall', '.*');

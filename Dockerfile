@@ -47,7 +47,7 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | b
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && \
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" && \
     nvm install --lts && \
-    npm install --global yarn @angular/cli
+    npm install --global yarn @angular/cli@latest
 
 #Prepare supervisord
 RUN echo $'[unix_http_server]\n\
@@ -160,7 +160,7 @@ stdout_logfile=/dev/stdout\n\
 stdout_logfile_maxbytes=0\n\
 stderr_logfile=/dev/stderr\n\
 stderr_logfile_maxbytes=0\n\
-username=www-data\n\
+username=root\n\
 autorestart=true\n\
 autostart=true' > /etc/supervisor/conf.d/nginx.conf
 
@@ -196,7 +196,7 @@ then\n\
             -d|--dev)\n\
                 echo "[program:yarn-watcher]\n\
 directory=/var/www/html\n\
-command=/bin/bash -c \'source /root/.nvm/nvm.sh && nvm use --lts && yarn watch\'\n\
+command=/bin/bash -c \'source /root/.nvm/nvm.sh && nvm use --lts && ng build --watch\'\n\
 stdout_logfile=/var/log/yarn-watcher/output.log\n\
 stderr_logfile=/var/log/yarn-watcher/error.log\n\
 autorestart=true\n\
@@ -240,9 +240,7 @@ QUEUE_CONNECTION=database\n\
 SESSION_DRIVER=file\n\
 SESSION_LIFETIME=120' > .env && \
     php artisan migrate && \
-    php artisan key:generate && \
-    echo "Setting permissions..." && \
-    chown -fR www-data:www-data /var/www/html
+    php artisan key:generate
 
 EXPOSE 80 953 7681
 

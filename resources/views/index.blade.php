@@ -1,52 +1,18 @@
-@extends('layouts.page')
-
-@section('body')
-    <header class="row">
-        <div class="col-12">
-            <h1 class="d-flex justify-content-center">Dev Daze</h1>
-        </div>
-    </header>
-    <div class="col-12">
-        <div id="terminal"></div>
-    </div>
-    <div class="col-12">
-        <h2 class="d-flex justify-content-center">Projects</h2>
-    </div
-    @if(sizeof($groups) > 0)
-        <div class="row">
-            <table width="100%">
-                @foreach($groups as $group)
-                <tr>
-                    <td>
-                        <a href="{{ route('groups.edit', $group->id) }}">{{ $group->title }}</a>
-                    </td>
-                    <td>
-                        <a href="{{ $group->url }}">{{ $group->url }}</a>
-                    </td>
-                    <td>
-                        {!! Form::open()->formInLine()->route('groups.destroy', compact('group'))->delete() !!}
-                            <input type="submit" value="Delete" />
-                        {!! Form::close() !!}
-                    </td>
-                </tr>
-                @endforeach
-            </table>
-        </div>
-    @else
-        <div class="row">
-                <div class="col-12">
-                    No groups.
-                </div>
-        </div>
-    @endif
-    <div class="row">
-        <div class="col-12">
-            <a href="{{ route('groups.create') }}" class="btn btn-primary">Add Group</a>
-        </div>
-    </div>
-    <div class="row snap-bottom" style="align-self: flex-end">
-        <div class="col-12">
-            <iframe src="http://localhost:7681" width="100%"></iframe>
-        </div>
-    </div>
-@endsection
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/">
+    <title>Dev Daze</title>
+    <link rel="stylesheet" href="/ng/styles.css">
+</head>
+<body class="container-fluid">
+<app-root></app-root>
+<script src="/ng/runtime.js" defer></script>
+<script src="/ng/polyfills.js" defer></script>
+<script src="/ng/scripts.js" defer></script>
+<script src="/ng/vendor.js" defer></script>
+<script src="/ng/main.js" defer></script>
+</body>
+</html>

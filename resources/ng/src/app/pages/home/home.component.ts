@@ -16,13 +16,13 @@ export class HomeComponent implements OnInit {
   groups$: Observable<Array<Group>> = of();
 
   ngOnInit(): void {
-    this.groups$ = this.http.get<Array<Group>>('http://localhost:9091/api/v1/group');
+    this.groups$ = this.http.get<Array<Group>>('/api/v1/group');
   }
 
   delete(id: number): void {
-    this.http.delete<Group>(`http://localhost:9091/api/v1/group/${id}`)
+    this.http.delete<Group>(`/api/v1/group/${id}`)
       .subscribe((response) => { console.log(response)})
       .unsubscribe();
-    this.groups$ = this.http.get<Array<Group>>('http://localhost:9091/api/v1/group');
+    this.groups$ = this.http.get<Array<Group>>('/api/v1/group');
   }
 }
