@@ -47,7 +47,7 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | b
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && \
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" && \
     nvm install --lts && \
-    npm install --global yarn @angular/cli@latest
+    npm install --global yarn @angular/cli@latest --unsafe-perm=true --allow-root
 
 #Prepare supervisord
 RUN echo $'[unix_http_server]\n\
@@ -195,7 +195,7 @@ then\n\
         case $key in\n\
             -d|--dev)\n\
                 echo "[program:yarn-watcher]\n\
-directory=/var/www/html\n\
+directory=/var/www/html/resources/ng\n\
 command=/bin/bash -c \'source /root/.nvm/nvm.sh && nvm use --lts && ng build --watch\'\n\
 stdout_logfile=/var/log/yarn-watcher/output.log\n\
 stderr_logfile=/var/log/yarn-watcher/error.log\n\
