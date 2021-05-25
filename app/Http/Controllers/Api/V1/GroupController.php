@@ -29,7 +29,7 @@ class GroupController extends Controller
     {
         $this->validate($request, (new Group)->validations());
 
-        return redirect()->json(Group::create($request->all()));
+        return response()->json(Group::create($request->all()));
     }
 
     /**
@@ -46,7 +46,7 @@ class GroupController extends Controller
         // Purge the slug for regeneration per https://github.com/cviebrock/eloquent-sluggable#onupdate
         $group->slug = null;
 
-        return redirect()->json($group->update($request->all()));
+        return response()->json($group->update($request->all()));
     }
 
     /**

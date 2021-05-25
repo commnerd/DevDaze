@@ -32,6 +32,8 @@ RUN apt-get update -y && \
     supervisor \
     nodejs \
     npm \
+    sqlite3 \
+    libsqlite3-dev \
     docker-ce-cli \
     php${PHP_VERSION} \
     php${PHP_VERSION}-fpm \
@@ -83,7 +85,7 @@ command=/usr/local/bin/ttyd bash\n\
 priority=900\n\
 stdout_logfile=/var/log/ttyd/ttyd.log\n\
 stderr_logfile=/var/log/ttyd/error.log\n\
-username=root\n\
+user=root\n\
 autorestart=true\n\
 autostart=true' > /etc/supervisor/conf.d/ttyd.conf
 
@@ -115,6 +117,7 @@ RUN mkdir -p /run/php && \
     touch /var/log/php-fpm/stderr.log && \
     echo $'[program:php-fpm]\n\
 command=/usr/sbin/php-fpm'${PHP_VERSION}$' -F\n\
+user=root\n\
 autostart=true\n\
 autorestart=true\n\
 stdout_logfile=/var/log/php-fpm/stdout.log\n\
@@ -160,7 +163,7 @@ stdout_logfile=/dev/stdout\n\
 stdout_logfile_maxbytes=0\n\
 stderr_logfile=/dev/stderr\n\
 stderr_logfile_maxbytes=0\n\
-username=root\n\
+user=root\n\
 autorestart=true\n\
 autostart=true' > /etc/supervisor/conf.d/nginx.conf
 
@@ -187,6 +190,7 @@ RUN echo $'#!/usr/bin/bash\n\
 set -e\n\
 \n\
 chmod -fR a+w /var/www/html/storage\n\
+chmod a+rwx database/database.sqlite\n\
 if [[ "${1:0:1}" == "-" ]]\n\
 then\n\
     while [[ $# -gt 0 ]]\n\
