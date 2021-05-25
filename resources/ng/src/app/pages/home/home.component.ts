@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of } from "rxjs";
+import {Observable, of, Subscription} from "rxjs";
 import { HttpClient } from '@angular/common/http';
 
 import { Group } from "@interfaces/group.interface";
@@ -20,9 +20,12 @@ export class HomeComponent implements OnInit {
   }
 
   delete(id: number): void {
-    this.http.delete<Group>(`/api/v1/group/${id}`)
-      .subscribe((response) => { console.log(response)})
-      .unsubscribe();
+    let subscription: Subscription = this.http.delete<Group>(`/api/v1/group/${id}`)
+      .subscribe((response) => {
+        console.log(response);
+        subscription.unsubscribe();
+      });
+
     this.groups$ = this.http.get<Array<Group>>('/api/v1/group');
   }
 }

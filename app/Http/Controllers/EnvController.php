@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DockerImages\Env;
+use App\Models\Images\Env;
 use Illuminate\Http\Request;
 
 class EnvController extends Controller
@@ -41,7 +41,7 @@ class EnvController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\DockerImages\Env  $env
+     * @param  \App\Models\Images\Env  $env
      * @return \Illuminate\Http\Response
      */
     public function show(Env $env)
@@ -52,7 +52,7 @@ class EnvController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\DockerImages\Env  $env
+     * @param  \App\Models\Images\Env  $env
      * @return \Illuminate\Http\Response
      */
     public function edit(Env $env)
@@ -64,7 +64,7 @@ class EnvController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\DockerImages\Env  $env
+     * @param  \App\Models\Images\Env  $env
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Env $env)
@@ -75,7 +75,7 @@ class EnvController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\DockerImages\Env  $env
+     * @param  \App\Models\Images\Env  $env
      * @return \Illuminate\Http\Response
      */
     public function destroy(Env $env)

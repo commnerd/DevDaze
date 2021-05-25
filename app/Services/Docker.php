@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use Symfony\Component\Process\Process;
-use App\Models\DockerImage;
+use App\Models\Image;
 
 class Docker
 {
@@ -17,10 +17,10 @@ class Docker
     /**
      * Check if a docker image is running
      *
-     * @param DockerImage $dockerImage
+     * @param Image $dockerImage
      * @return bool
      */
-    public static function running(DockerImage $dockerImage): bool
+    public static function running(Image $dockerImage): bool
     {
         $cmd = ["docker", "ps", "--filter", "name=".$dockerImage->name()];
 
@@ -32,10 +32,10 @@ class Docker
     /**
      * Run a container from a docker image
      *
-     * @param DockerImage $dockerImage
+     * @param Image $dockerImage
      * @return array
      */
-    public static function run(DockerImage $dockerImage): array
+    public static function run(Image $dockerImage): array
     {
         $cmd = ["docker", "run", "-d", "--rm", "--name", $dockerImage->name(), $dockerImage->tag];
 
@@ -45,10 +45,10 @@ class Docker
     /**
      * Kill a docker image
      *
-     * @param DockerImage $dockerImage
+     * @param Image $dockerImage
      * @return array
      */
-    public static function kill(DockerImage $dockerImage): array
+    public static function kill(Image $dockerImage): array
     {
         $cmd = ["docker", "kill", $dockerImage->name()];
 
@@ -58,10 +58,10 @@ class Docker
     /**
      * Restart a service
      *
-     * @param DockerImage $dockerImage
+     * @param Image $dockerImage
      * @return array
      */
-    public static function restart(DockerImage $dockerImage): array
+    public static function restart(Image $dockerImage): array
     {
         if(self::running($dockerImage)) {
             self::kill($dockerImage);

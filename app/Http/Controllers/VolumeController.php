@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DockerImages\Volume;
+use App\Models\Images\Volume;
 use Illuminate\Http\Request;
 
 class VolumeController extends Controller
@@ -41,7 +41,7 @@ class VolumeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\DockerImages\Volume  $volume
+     * @param  \App\Models\Images\Volume  $volume
      * @return \Illuminate\Http\Response
      */
     public function show(Volume $volume)
@@ -52,7 +52,7 @@ class VolumeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\DockerImages\Volume  $volume
+     * @param  \App\Models\Images\Volume  $volume
      * @return \Illuminate\Http\Response
      */
     public function edit(Volume $volume)
@@ -64,7 +64,7 @@ class VolumeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\DockerImages\Volume  $volume
+     * @param  \App\Models\Images\Volume  $volume
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Volume $volume)
@@ -75,7 +75,7 @@ class VolumeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\DockerImages\Volume  $volume
+     * @param  \App\Models\Images\Volume  $volume
      * @return \Illuminate\Http\Response
      */
     public function destroy(Volume $volume)

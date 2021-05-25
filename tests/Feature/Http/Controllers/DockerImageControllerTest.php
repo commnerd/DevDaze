@@ -3,7 +3,7 @@
 namespace Tests\Feature\Http\Controllers;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\DockerImage;
+use App\Models\Image;
 use App\Models\Group;
 use Tests\TestCase;
 
@@ -18,7 +18,7 @@ class DockerImageControllerTest extends TestCase
      */
     public function testDockerImageList()
     {
-        $dockerImage = DockerImage::factory()->create([
+        $dockerImage = Image::factory()->create([
             "label" => "Woot!",
             "tag" => "image:latest",
         ]);
@@ -66,9 +66,9 @@ class DockerImageControllerTest extends TestCase
         ]);
 
         $response->assertStatus(302);
-        $this->assertEquals(1, DockerImage::count());
+        $this->assertEquals(1, Image::count());
 
-        $dockerImage = DockerImage::findOrFail(1);
+        $dockerImage = Image::findOrFail(1);
 
         $this->assertEquals($groupId, $dockerImage->group_id);
         $this->assertEquals("Foo!", $dockerImage->label);
@@ -83,7 +83,7 @@ class DockerImageControllerTest extends TestCase
      */
     public function testDockerImageEdit()
     {
-        $dockerImage = DockerImage::factory()->create();
+        $dockerImage = Image::factory()->create();
 
         $response = $this->get(route('groups.docker_images.edit', [$dockerImage->group->id, $dockerImage->id]));
 
@@ -106,7 +106,7 @@ class DockerImageControllerTest extends TestCase
      */
     public function testDockerImageUpdate()
     {
-        $dockerImage = DockerImage::factory()->create();
+        $dockerImage = Image::factory()->create();
 
         $response = $this->put(route('groups.docker_images.update', [$dockerImage->group->id, $dockerImage->id]), [
             "group_id" => $dockerImage->group->id,
@@ -116,7 +116,7 @@ class DockerImageControllerTest extends TestCase
 
         $response->assertStatus(302);
 
-        $dockerImage = DockerImage::findOrFail(1);
+        $dockerImage = Image::findOrFail(1);
 
         $this->assertEquals("Foo!", $dockerImage->label);
         $this->assertEquals("nginx:latest", $dockerImage->tag);
@@ -130,15 +130,15 @@ class DockerImageControllerTest extends TestCase
      */
     public function testDockerImageDestroy()
     {
-        $dockerImage = DockerImage::factory()->create();
+        $dockerImage = Image::factory()->create();
 
-        $this->assertEquals(1, DockerImage::count());
+        $this->assertEquals(1, Image::count());
 
         $response = $this->delete(route('groups.docker_images.destroy', [$dockerImage->group->id, $dockerImage->id]));
 
         $response->assertStatus(302);
 
-        $this->assertEquals(0, DockerImage::count());
+        $this->assertEquals(0, Image::count());
     }
 
     /**
@@ -149,7 +149,7 @@ class DockerImageControllerTest extends TestCase
     public function testDockerImageRequiredValidations()
     {
         foreach($this->requiredFields as $requiredField) {
-            $dockerImage = DockerImage::factory()->make();
+            $dockerImage = Image::factory()->make();
 
             $groupId = $dockerImage->group->id;
 
@@ -164,12 +164,12 @@ class DockerImageControllerTest extends TestCase
                 $requiredField => "The ".str_replace("_", " ", $requiredField)." field is required.",
             ]);
 
-            if(is_null(DockerImage::first())) {
-                $dockerImage = DockerImage::factory()->create([
+            if(is_null(Image::first())) {
+                $dockerImage = Image::factory()->create([
                     'group_id' => $groupId,
                 ]);
             }
-            $dockerImage = DockerImage::first();
+            $dockerImage = Image::first();
             $dockerImage->{$requiredField} = $value;
 
             // Fail update

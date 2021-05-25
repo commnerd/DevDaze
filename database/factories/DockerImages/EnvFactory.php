@@ -2,7 +2,7 @@
 
 namespace Database\Factories\DockerImages;
 
-use App\Models\DockerImages\Env;
+use App\Models\Images\Env;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class EnvFactory extends Factory

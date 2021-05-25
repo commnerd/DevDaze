@@ -8,20 +8,20 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Bus\Queueable;
-use App\Models\DockerImage;
+use App\Models\Image;
 
 class DockerEvent implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private DockerImage $dockerImage;
+    private Image $dockerImage;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(DockerImage $dockerImage)
+    public function __construct(Image $dockerImage)
     {
         $this->dockerImage = $dockerImage;
     }
@@ -33,6 +33,6 @@ class DockerEvent implements ShouldQueue
      */
     public function handle()
     {
-        
+
     }
 }

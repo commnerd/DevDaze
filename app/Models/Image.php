@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Cviebrock\EloquentSluggable\Sluggable;
-use App\Interfaces\DockerImageDescendant;
-use App\Models\DockerImages\Volume;
+use App\Interfaces\ImageDescendant;
+use App\Models\Images\Volume;
 use App\Traits\BumpsService;
 
-class DockerImage extends Model implements DockerImageDescendant
+class Image extends Model implements ImageDescendant
 {
     use HasFactory, Sluggable, BumpsService;
 
@@ -75,9 +75,9 @@ class DockerImage extends Model implements DockerImageDescendant
     /**
      * Return this as a docker image to satisfy DockerImageDescendant interface
      *
-     * @return DockerImage
+     * @return Image
      */
-    public function getDockerImageAttribute(): DockerImage {
+    public function getDockerImageAttribute(): Image {
         return $this;
     }
 }

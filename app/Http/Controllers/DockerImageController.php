@@ -6,7 +6,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Traits\BumpsService;
-use App\Models\DockerImage;
+use App\Models\Image;
 use App\Models\Group;
 
 class DockerImageController extends Controller
@@ -33,7 +33,7 @@ class DockerImageController extends Controller
      */
     public function store(Request $request, Group $group): RedirectResponse
     {
-        $this->validate($request, (new DockerImage)->validations());
+        $this->validate($request, (new Image)->validations());
 
         $group->docker_images()->create($request->all());
 
@@ -44,10 +44,10 @@ class DockerImageController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Group  $group
-     * @param  \App\Models\DockerImage  $dockerImage
+     * @param  \App\Models\Image  $dockerImage
      * @return \Illuminate\Http\Response
      */
-    public function edit(Group $group, DockerImage $docker_image): Response
+    public function edit(Group $group, Image $docker_image): Response
     {
         return response()->view('groups.docker_images.edit', compact('group', 'docker_image'));
     }
@@ -57,10 +57,10 @@ class DockerImageController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Group  $group
-     * @param  \App\Models\DockerImage  $dockerImage
+     * @param  \App\Models\Image  $dockerImage
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Group $group, DockerImage $docker_image): RedirectResponse
+    public function update(Request $request, Group $group, Image $docker_image): RedirectResponse
     {
         $this->validate($request, $docker_image->validations());
 
@@ -75,10 +75,10 @@ class DockerImageController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Group  $group
-     * @param  \App\Models\DockerImage  $dockerImage
+     * @param  \App\Models\Image  $dockerImage
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Group $group, DockerImage $dockerImage)
+    public function destroy(Group $group, Image $dockerImage)
     {
         $dockerImage->delete();
 

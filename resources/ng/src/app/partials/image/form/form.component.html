@@ -1,0 +1,29 @@
+<form [formGroup]="imageForm" (ngSubmit)="submit()">
+  <div class="form-group">
+    <label for="image-name">Name</label>
+    <input type="text" class="form-control" id="image-name" placeholder="Name" formControlName="name">
+  </div>
+  <ng-container *ngFor="let env in envs let i = index;">
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Label" formControlName="label">
+      :
+      <input type="text" class="form-control" placeholder="Value" formControlName="value">
+    </div>
+  </ng-container>
+  <ng-container *ngFor="let port in ports let i = index;">
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Host Port" formControlName="host_port">
+      :
+      <input type="text" class="form-control" placeholder="Container Port" formControlName="container_port">
+    </div>
+  </ng-container>
+  <ng-container *ngFor="let volume in volumes let i = index;">
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Host Path" formControlName="host_path">
+      :
+      <input type="text" class="form-control" placeholder="Container Path" formControlName="container_path">
+    </div>
+  </ng-container>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

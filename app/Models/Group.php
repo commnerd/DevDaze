@@ -14,7 +14,7 @@ class Group extends Model
 
     /**
      * Variable used to declare model's 'fillable' variables
-     * 
+     *
      * @var $fillable
      */
     protected $fillable = [
@@ -25,7 +25,7 @@ class Group extends Model
 
     /**
      * Validation definitions
-     * 
+     *
      * @return array Validation definitions
      */
     public function validations(): array {
@@ -38,7 +38,7 @@ class Group extends Model
 
     /**
      * Override save method to update configurations
-     * 
+     *
      * @param array $options
      */
     public function save(array $options = []) {
@@ -49,12 +49,12 @@ class Group extends Model
 
     /**
      * Docker image relationship
-     * 
+     *
      * @return HasMany
      */
     public function docker_images(): HasMany
     {
-        return $this->hasMany(DockerImage::class);
+        return $this->hasMany(Image::class);
     }
 
     /**

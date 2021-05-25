@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\DockerImage;
+use App\Models\Image;
 use App\Models\Group;
 
 class DockerImageFactory extends Factory
@@ -13,7 +13,7 @@ class DockerImageFactory extends Factory
      *
      * @var string
      */
-    protected $model = DockerImage::class;
+    protected $model = Image::class;
 
     /**
      * Define the model's default state.

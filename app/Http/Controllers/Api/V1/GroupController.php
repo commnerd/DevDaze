@@ -20,6 +20,16 @@ class GroupController extends Controller
     }
 
     /**
+     * Display the resource.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(Group $group): JsonResponse
+    {
+        return response()->json($group);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

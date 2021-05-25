@@ -7,20 +7,20 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\Channel;
-use App\Models\DockerImage;
+use App\Models\Image;
 
 class DockerImageChangeEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public DockerImage $dockerImage;
+    public Image $dockerImage;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(DockerImage $dockerImage)
+    public function __construct(Image $dockerImage)
     {
         $this->dockerImage = $dockerImage;
     }
